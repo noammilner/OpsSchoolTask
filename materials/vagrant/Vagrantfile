@@ -18,11 +18,14 @@ servers=[
 ]
 
 Vagrant.configure(2) do |config|
+  # Add this line to enable insecure box downloads
+  config.vm.box_download_insecure = true
+
   servers.each do |machine|
     config.vm.define machine[:hostname] do |node|
-        machine [:provisions].each do |script|
-           node.vm.provision :shell, :path => script
-        end
+      machine[:provisions].each do |script|
+        node.vm.provision :shell, :path => script
+      end
       node.vm.box = machine[:box]
       node.vm.hostname = machine[:hostname]
       node.vm.network "private_network", ip: machine[:ip]
@@ -34,5 +37,3 @@ Vagrant.configure(2) do |config|
     end
   end
 end
-
-
